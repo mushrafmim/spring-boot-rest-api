@@ -20,6 +20,7 @@ public class SburRestDemoApplication {
 
 
 @RestController
+@RequestMapping("/coffees")
 class RestApiDemoController {
 	private final List<Coffee> coffees = new ArrayList<>();
 
@@ -32,12 +33,12 @@ class RestApiDemoController {
 		));
 	}
 
-	@GetMapping("/coffees")
+	@GetMapping
 	Iterable<Coffee> getCoffees() {
 		return coffees;
 	}
 
-	@GetMapping("/coffees/{id}")
+	@GetMapping("/{id}")
 	Optional<Coffee> getCoffeeById(@PathVariable String id) {
 		for (Coffee c: coffees) {
 			if (c.getId().equals(id)) {
@@ -47,13 +48,13 @@ class RestApiDemoController {
 		return Optional.empty();
 	}
 
-	@PostMapping("/coffees")
+	@PostMapping
 	Coffee postCoffee(@RequestBody Coffee coffee) {
 		coffees.add(coffee);
 		return coffee;
 	}
 
-	@PutMapping("/coffees/{id}")
+	@PutMapping("/{id}")
 	Coffee putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {
 		int coffeeIndex = -1;
 
@@ -68,7 +69,7 @@ class RestApiDemoController {
 		return (coffeeIndex == -1) ? postCoffee(coffee): coffee;
 	}
 
-	@DeleteMapping("/coffees/{id}")
+	@DeleteMapping("/{id}")
 	void deleteCoffee(@PathVariable String id) {
 		coffees.removeIf(coffee -> coffee.getId().equals(id));
 	}
