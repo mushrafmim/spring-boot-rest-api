@@ -2,6 +2,8 @@ package com.handysof.sburrestdemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ class RestApiDemoController {
 	}
 
 	@PutMapping("/{id}")
-	Coffee putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {
+	ResponseEntity<Coffee> putCoffee(@PathVariable String id, @RequestBody Coffee coffee) {
 		int coffeeIndex = -1;
 
 		for (Coffee c : coffees) {
@@ -66,7 +68,9 @@ class RestApiDemoController {
 
 		}
 
-		return (coffeeIndex == -1) ? postCoffee(coffee): coffee;
+		return (coffeeIndex == -1) ?
+			new ResponseEntity<>(postCoffee(coffee), HttpStatus.CREATED) :
+				new ResponseEntity<>(coffee, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
